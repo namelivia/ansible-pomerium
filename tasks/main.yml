@@ -25,7 +25,7 @@
       IDP_PROVIDER_URL: "https://accounts.google.com"
       IDP_CLIENT_ID: "{{idp_client_id}}"
       IDP_CLIENT_SECRET: "{{idp_client_secret}}"
-      IDP_SERVICE_ACCOUNT: "{{idp_service_accoutn}}"
+      IDP_SERVICE_ACCOUNT: "{{idp_service_account}}"
       SHARED_SECRET: "{{ shared_secret }}"
       COOKIE_SECRET: "{{ cookie_secret }}"
       VIRTUAL_PROTO: "http"
