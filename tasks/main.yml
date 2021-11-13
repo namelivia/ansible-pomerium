@@ -1,0 +1,110 @@
+---
+- name: Create the dockernetwork
+  docker_network:
+    name: "{{ docker_network_name }}"
+
+- name: Create pomerium authenticate
+  docker_container:
+    name: "pomerium-authenticate"
+    image: "pomerium/pomerium:v0.11.0-rc1"
+    restart_policy: "always"
+    exposed_ports: 443
+    volumes:
+        - "{{ hostvars[inventory_hostname].working_directory }}pomerium:/pomerium"
+    log_driver: "awslogs"
+    log_options:
+        awslogs-region: "{{cloudwatch_region}}"
+        awslogs-group: "{{cloudwatch_log_group}}"
+        awslogs-stream: "pomerium-authenticate"
+    networks:
+      - name: "{{ docker_network_name }}"
+    env:
+      SERVICES: "authenticate"
+      INSECURE_SERVER: "true"
+      IDP_PROVIDER: "google"
+      IDP_PROVIDER_URL: "https://accounts.google.com"
+      IDP_CLIENT_ID: "{{idp_client_id}}"
+      IDP_CLIENT_SECRET: "{{idp_client_secret}}"
+      IDP_SERVICE_ACCOUNT: "{{idp_service_accoutn}}"
+      SHARED_SECRET: "{{ shared_secret }}"
+      COOKIE_SECRET: "{{ cookie_secret }}"
+      VIRTUAL_PROTO: "http"
+      VIRTUAL_HOST: "{{authenticate_virtual_host}}"
+      VIRTUAL_PORT: "443"
+      GRPC_INSECURE: "true"
+
+- name: Create pomerium proxy
+  docker_container:
+    name: "pomerium-proxy"
+    image: "pomerium/pomerium:v0.11.0-rc1"
+    restart_policy: "always"
+    exposed_ports: 443
+    networks:
+      - name: "{{ docker_network_name }}"
+    volumes:
+        - "{{ hostvars[inventory_hostname].working_directory }}pomerium:/pomerium"
+    log_driver: "awslogs"
+    log_options:
+        awslogs-region: "{{cloudwatch_region}}"
+        awslogs-group: "{{cloudwatch_log_group}}"
+        awslogs-stream: "pomerium-proxy"
+    env:
+      SERVICES: "proxy"
+      INSECURE_SERVER: "TRUE"
+      AUTHORIZE_SERVICE_URL: "http://pomerium-authorize:443"
+      SHARED_SECRET: "{{ shared_secret }}"
+      COOKIE_SECRET: "{{ cookie_secret }}"
+      VIRTUAL_PROTO: "http"
+      VIRTUAL_HOST: "{{proxy_virtual_host}}"
+      VIRTUAL_PORT: "443"
+
+- name: Create pomerium authorize
+  docker_container:
+    name: "pomerium-authorize"
+    image: "pomerium/pomerium:v0.11.0-rc1"
+    exposed_ports: 443
+    restart_policy: "always"
+    networks:
+      - name: "{{ docker_network_name }}"
+    volumes:
+        - "{{ hostvars[inventory_hostname].working_directory }}pomerium:/pomerium"
+    log_driver: "awslogs"
+    log_options:
+        awslogs-region: "{{cloudwatch_region}}"
+        awslogs-group: "{{cloudwatch_log_group}}"
+        awslogs-stream: "pomerium-authorize"
+    env:
+      SERVICES: "authorize"
+      SHARED_SECRET: "{{ shared_secret }}"
+      GRPC_INSECURE: "TRUE"
+      GRPC_ADDRESS: ":443"
+
+- name: Create pomerium cache
+  docker_container:
+    name: "pomerium-cache"
+    image: "pomerium/pomerium:v0.11.0-rc1"
+    exposed_ports: 443
+    restart_policy: "always"
+    networks:
+      - name: "{{ docker_network_name }}"
+    volumes:
+        - "{{ hostvars[inventory_hostname].working_directory }}pomerium:/pomerium"
+    log_driver: "awslogs"
+    log_options:
+        awslogs-region: "{{cloudwatch_region}}"
+        awslogs-group: "{{cloudwatch_log_group}}"
+        awslogs-stream: "pomerium-cache"
+    env:
+      SERVICES: "cache"
+      SHARED_SECRET: "{{ shared_secret }}"
+      GRPC_INSECURE: "TRUE"
+      GRPC_ADDRESS: ":443"
+
+- name: Copy pomerium config
+  copy:
+    src: "{{pomerium_config_path}}"
+    dest: "{{ hostvars[inventory_hostname].working_directory }}"
+    owner: ubuntu
+    group: ubuntu
+    mode: '0644'
+
