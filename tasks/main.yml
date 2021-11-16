@@ -26,12 +26,12 @@
     restart_policy: "always"
     exposed_ports: 443
     volumes:
-        - "{{ hostvars[inventory_hostname].working_directory }}pomerium:/pomerium"
+      - "{{ hostvars[inventory_hostname].working_directory }}pomerium:/pomerium"
     log_driver: "awslogs"
     log_options:
-        awslogs-region: "{{cloudwatch_region}}"
-        awslogs-group: "{{cloudwatch_log_group}}"
-        awslogs-stream: "pomerium-authenticate"
+      awslogs-region: "{{ cloudwatch_region }}"
+      awslogs-group: "{{ cloudwatch_log_group }}"
+      awslogs-stream: "pomerium-authenticate"
     networks:
       - name: "{{ docker_network_name }}"
     env:
@@ -39,13 +39,13 @@
       INSECURE_SERVER: "true"
       IDP_PROVIDER: "google"
       IDP_PROVIDER_URL: "https://accounts.google.com"
-      IDP_CLIENT_ID: "{{idp_client_id}}"
-      IDP_CLIENT_SECRET: "{{idp_client_secret}}"
-      IDP_SERVICE_ACCOUNT: "{{idp_service_account}}"
+      IDP_CLIENT_ID: "{{ idp_client_id }}"
+      IDP_CLIENT_SECRET: "{{ idp_client_secret }}"
+      IDP_SERVICE_ACCOUNT: "{{ idp_service_account }}"
       SHARED_SECRET: "{{ shared_secret }}"
       COOKIE_SECRET: "{{ cookie_secret }}"
       VIRTUAL_PROTO: "http"
-      VIRTUAL_HOST: "{{authenticate_virtual_host}}"
+      VIRTUAL_HOST: "{{ authenticate_virtual_host }}"
       VIRTUAL_PORT: "443"
       GRPC_INSECURE: "true"
 
@@ -58,12 +58,12 @@
     networks:
       - name: "{{ docker_network_name }}"
     volumes:
-        - "{{ hostvars[inventory_hostname].working_directory }}pomerium:/pomerium"
+      - "{{ hostvars[inventory_hostname].working_directory }}pomerium:/pomerium"
     log_driver: "awslogs"
     log_options:
-        awslogs-region: "{{cloudwatch_region}}"
-        awslogs-group: "{{cloudwatch_log_group}}"
-        awslogs-stream: "pomerium-proxy"
+      awslogs-region: "{{ cloudwatch_region }}"
+      awslogs-group: "{{ cloudwatch_log_group }}"
+      awslogs-stream: "pomerium-proxy"
     env:
       SERVICES: "proxy"
       INSECURE_SERVER: "TRUE"
@@ -71,7 +71,7 @@
       SHARED_SECRET: "{{ shared_secret }}"
       COOKIE_SECRET: "{{ cookie_secret }}"
       VIRTUAL_PROTO: "http"
-      VIRTUAL_HOST: "{{proxy_virtual_host}}"
+      VIRTUAL_HOST: "{{ proxy_virtual_host }}"
       VIRTUAL_PORT: "443"
 
 - name: Create pomerium authorize
@@ -83,12 +83,12 @@
     networks:
       - name: "{{ docker_network_name }}"
     volumes:
-        - "{{ hostvars[inventory_hostname].working_directory }}pomerium:/pomerium"
+      - "{{ hostvars[inventory_hostname].working_directory }}pomerium:/pomerium"
     log_driver: "awslogs"
     log_options:
-        awslogs-region: "{{cloudwatch_region}}"
-        awslogs-group: "{{cloudwatch_log_group}}"
-        awslogs-stream: "pomerium-authorize"
+      awslogs-region: "{{ cloudwatch_region }}"
+      awslogs-group: "{{ cloudwatch_log_group }}"
+      awslogs-stream: "pomerium-authorize"
     env:
       SERVICES: "authorize"
       SHARED_SECRET: "{{ shared_secret }}"
@@ -104,12 +104,12 @@
     networks:
       - name: "{{ docker_network_name }}"
     volumes:
-        - "{{ hostvars[inventory_hostname].working_directory }}pomerium:/pomerium"
+      - "{{ hostvars[inventory_hostname].working_directory }}pomerium:/pomerium"
     log_driver: "awslogs"
     log_options:
-        awslogs-region: "{{cloudwatch_region}}"
-        awslogs-group: "{{cloudwatch_log_group}}"
-        awslogs-stream: "pomerium-cache"
+      awslogs-region: "{{ cloudwatch_region }}"
+      awslogs-group: "{{ cloudwatch_log_group }}"
+      awslogs-stream: "pomerium-cache"
     env:
       SERVICES: "cache"
       SHARED_SECRET: "{{ shared_secret }}"
@@ -118,9 +118,8 @@
 
 - name: Copy pomerium config
   copy:
-    src: "{{pomerium_config_path}}"
+    src: "{{ pomerium_config_path }}"
     dest: "{{ hostvars[inventory_hostname].working_directory }}"
     owner: ubuntu
     group: ubuntu
     mode: '0644'
-
