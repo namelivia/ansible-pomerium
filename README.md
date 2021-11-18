@@ -11,7 +11,7 @@ collections:
   - community.docker
 
 roles:
-  - src: https://github.com/namelivia/namelivia.pomerium
+  - src: https://github.com/namelivia/ansible-pomerium
 ```
 
 ## Required variables (TODO: Update these)
