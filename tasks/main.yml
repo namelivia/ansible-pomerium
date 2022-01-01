@@ -24,6 +24,7 @@
     name: "pomerium-authenticate"
     image: "pomerium/pomerium:v0.11.0-rc1"
     restart_policy: "always"
+    cleanup: true
     exposed_ports: 443
     volumes:
       - "{{ hostvars[inventory_hostname].working_directory }}pomerium:/pomerium"
@@ -55,6 +56,7 @@
     image: "pomerium/pomerium:v0.11.0-rc1"
     restart_policy: "always"
     exposed_ports: 443
+    cleanup: true
     networks:
       - name: "{{ docker_network_name }}"
     volumes:
@@ -79,6 +81,7 @@
     name: "pomerium-authorize"
     image: "pomerium/pomerium:v0.11.0-rc1"
     exposed_ports: 443
+    cleanup: true
     restart_policy: "always"
     networks:
       - name: "{{ docker_network_name }}"
@@ -100,6 +103,7 @@
     name: "pomerium-cache"
     image: "pomerium/pomerium:v0.11.0-rc1"
     exposed_ports: 443
+    cleanup: true
     restart_policy: "always"
     networks:
       - name: "{{ docker_network_name }}"
