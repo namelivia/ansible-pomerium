@@ -4,6 +4,7 @@
   assert:
     that:
       - docker_network_name is defined
+      - application_name is defined
       - cloudwatch_region is defined
       - cloudwatch_log_group is defined
       - shared_secret is defined
@@ -32,7 +33,7 @@
     log_options:
       awslogs-region: "{{ cloudwatch_region }}"
       awslogs-group: "{{ cloudwatch_log_group }}"
-      awslogs-stream: "pomerium-authenticate"
+      awslogs-stream: "{{ application_name }} -authenticate"
     networks:
       - name: "{{ docker_network_name }}"
     env:
@@ -65,7 +66,7 @@
     log_options:
       awslogs-region: "{{ cloudwatch_region }}"
       awslogs-group: "{{ cloudwatch_log_group }}"
-      awslogs-stream: "pomerium-proxy"
+      awslogs-stream: "{{ application_name }}-proxy"
     env:
       SERVICES: "proxy"
       INSECURE_SERVER: "TRUE"
@@ -91,7 +92,7 @@
     log_options:
       awslogs-region: "{{ cloudwatch_region }}"
       awslogs-group: "{{ cloudwatch_log_group }}"
-      awslogs-stream: "pomerium-authorize"
+      awslogs-stream: "{{ application_name }}-authorize"
     env:
       SERVICES: "authorize"
       SHARED_SECRET: "{{ shared_secret }}"
@@ -113,7 +114,7 @@
     log_options:
       awslogs-region: "{{ cloudwatch_region }}"
       awslogs-group: "{{ cloudwatch_log_group }}"
-      awslogs-stream: "pomerium-cache"
+      awslogs-stream: "{{ application_name }}-cache"
     env:
       SERVICES: "cache"
       SHARED_SECRET: "{{ shared_secret }}"
