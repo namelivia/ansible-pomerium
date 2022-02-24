@@ -124,7 +124,7 @@
 - name: Copy pomerium config
   copy:
     src: "{{ pomerium_config_path }}"
-    dest: "{{ hostvars[inventory_hostname].working_directory }}"
+    dest: "{{ hostvars[inventory_hostname].working_directory }}pomerium/config.yaml"
     owner: ubuntu
     group: ubuntu
     mode: '0644'
