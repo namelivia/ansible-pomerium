@@ -33,7 +33,7 @@
     log_options:
       awslogs-region: "{{ cloudwatch_region }}"
       awslogs-group: "{{ cloudwatch_log_group }}"
-      awslogs-stream: "{{ application_name }} -authenticate"
+      awslogs-stream: "{{ application_name }}-authenticate"
     networks:
       - name: "{{ docker_network_name }}"
     env:
