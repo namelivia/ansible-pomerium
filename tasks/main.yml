@@ -117,6 +117,11 @@
       awslogs-stream: "{{ application_name }}-cache"
     env:
       SERVICES: "cache"
+      IDP_PROVIDER: "google"
+      IDP_PROVIDER_URL: "https://accounts.google.com"
+      IDP_CLIENT_ID: "{{ idp_client_id }}"
+      IDP_CLIENT_SECRET: "{{ idp_client_secret }}"
+      IDP_SERVICE_ACCOUNT: "{{ idp_service_account }}"
       SHARED_SECRET: "{{ shared_secret }}"
       GRPC_INSECURE: "TRUE"
       GRPC_ADDRESS: ":443"
