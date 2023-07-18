@@ -22,7 +22,7 @@
 - name: Create pomerium authenticate
   docker_container:
     name: "pomerium-authenticate"
-    image: "pomerium/pomerium:v0.22.2"
+    image: "pomerium/pomerium:v0.21.3"
     restart_policy: "always"
     cleanup: true
     exposed_ports: 443
@@ -52,7 +52,7 @@
 - name: Create pomerium proxy
   docker_container:
     name: "pomerium-proxy"
-    image: "pomerium/pomerium:v0.22.2"
+    image: "pomerium/pomerium:v0.21.3"
     restart_policy: "always"
     exposed_ports: 443
     cleanup: true
@@ -77,7 +77,7 @@
 - name: Create pomerium authorize
   docker_container:
     name: "pomerium-authorize"
-    image: "pomerium/pomerium:v0.22.2"
+    image: "pomerium/pomerium:v0.21.3"
     exposed_ports: 443
     cleanup: true
     restart_policy: "always"
@@ -98,7 +98,7 @@
 - name: Create pomerium cache
   docker_container:
     name: "pomerium-cache"
-    image: "pomerium/pomerium:v0.22.2"
+    image: "pomerium/pomerium:v0.21.3"
     exposed_ports: 443
     cleanup: true
     restart_policy: "always"
