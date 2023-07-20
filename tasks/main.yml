@@ -34,6 +34,7 @@
       loki-batch-size: "400"
     networks:
       - name: "{{ docker_network_name }}"
+      - name: "bridge"
     env:
       SERVICES: "authenticate"
       INSECURE_SERVER: "true"
@@ -58,6 +59,7 @@
     cleanup: true
     networks:
       - name: "{{ docker_network_name }}"
+      - name: "bridge"
     volumes:
       - "{{ hostvars[inventory_hostname].working_directory }}pomerium:/pomerium"
     log_driver: "loki"
@@ -128,3 +130,7 @@
     owner: ubuntu
     group: ubuntu
     mode: '0644'
+
+- name: Restart proxy
+  shell: 
+    cmd: docker restart proxy
