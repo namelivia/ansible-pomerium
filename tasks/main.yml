@@ -100,7 +100,7 @@
 - name: Create pomerium cache
   docker_container:
     name: "pomerium-cache"
-    image: "pomerium/pomerium:v0.21.3"
+    image: "pomerium/pomerium:v0.25.1"
     exposed_ports: 443
     cleanup: true
     restart_policy: "always"
